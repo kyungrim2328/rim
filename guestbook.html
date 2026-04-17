@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guestbook | 박경림</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="overflow: auto; height: auto;">
+    <main class="guestbook-container">
+        <header class="guestbook-header">
+            <a href="index.html" class="back-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                돌아가기
+            </a>
+            <h1 style="color: var(--accent-color);">방명록</h1>
+        </header>
+
+        <section class="guestbook-form">
+            <div class="form-group">
+                <label for="name">이름</label>
+                <input type="text" id="name" placeholder="이름을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="message">메시지</label>
+                <textarea id="message" placeholder="메시지를 남겨주세요"></textarea>
+            </div>
+            <button class="submit-btn" id="submitBtn">메시지 남기기</button>
+        </section>
+
+        <section class="message-list" id="messageList">
+            <!-- Messages will be loaded here -->
+        </section>
+    </main>
+
+    <script>
+        const nameInput = document.getElementById('name');
+        const messageInput = document.getElementById('message');
+        const submitBtn = document.getElementById('submitBtn');
+        const messageList = document.getElementById('messageList');
+
+        // Load messages from localStorage
+        function loadMessages() {
+            const messages = JSON.parse(localStorage.getItem('guestbookMessages')) || [];
+            messageList.innerHTML = '';
+
+            if (messages.length === 0) {
+                messageList.innerHTML = '<div class="empty-message">아직 남겨진 메시지가 없습니다. 첫 번째 메시지를 남겨보세요!</div>';
+                return;
+            }
+
+            // Sort by date descending
+            messages.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            messages.forEach(msg => {
+                const card = document.createElement('div');
+                card.className = 'message-card';
+                card.innerHTML = `
+                    <div class="message-info">
+                        <span class="message-name">${msg.name}</span>
+                        <span class="message-date">${new Date(msg.date).toLocaleDateString()}</span>
+                    </div>
+                    <div class="message-content">${msg.content}</div>
+                `;
+                messageList.appendChild(card);
+            });
+        }
+
+        // Save message to localStorage
+        submitBtn.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            const content = messageInput.value.trim();
+
+            if (!name || !content) {
+                alert('이름과 메시지를 모두 입력해주세요!');
+                return;
+            }
+
+            const newMessage = {
+                name: name,
+                content: content,
+                date: new Date().toISOString()
+            };
+
+            const messages = JSON.parse(localStorage.getItem('guestbookMessages')) || [];
+            messages.push(newMessage);
+            localStorage.setItem('guestbookMessages', JSON.stringify(messages));
+
+            nameInput.value = '';
+            messageInput.value = '';
+            loadMessages();
+        });
+
+        // Initial load
+        window.onload = loadMessages;
+    </script>
+</body>
+</html>

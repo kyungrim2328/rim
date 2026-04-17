@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Park Kyung-rim | Portfolio</title>
+    <meta name="description" content="Portfolio of Park Kyung-rim, Department of Hotel & Convention.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard">
+    <!-- Lateral Decoration Sidebar -->
+    <aside class="sidebar">
+        <div class="decoration-circle"></div>
+        <div class="decoration-circle"></div>
+    </aside>
+
+    <main class="container">
+        <!-- Structural Dividers -->
+        <div class="horizontal-divider"></div>
+        <div class="vertical-divider"></div>
+
+        <!-- Header Content -->
+        <header class="header-left">About Kyung-rim</header>
+        <header class="header-right">01</header>
+
+        <!-- Left Column: Visual Profile -->
+        <section class="left-content">
+            <div class="polaroid-container">
+                <div class="paperclip"></div>
+                <!-- Assuming profile.jpg is in the same directory -->
+                <img src="profile.jpg" alt="Park Kyung-rim Profile" class="profile-img">
+            </div>
+
+            <div class="action-buttons">
+                <a href="hotels.html" target="_blank" class="guestbook-btn" style="background-color: #fdfaf6; color: var(--accent-color);">
+                    🏨 호텔 투어
+                </a>
+                <a href="jobs.html" target="_blank" class="guestbook-btn" style="background-color: var(--white); color: var(--accent-color);">
+                    💼 알바
+                </a>
+                <a href="guestbook.html" target="_blank" class="guestbook-btn">
+                    방명록 쓰기
+                </a>
+            </div>
+
+            <div class="name-tag">
+                <div class="designer-label">Sena</div>
+                <h1 class="name-main">박경림,</h1>
+            </div>
+
+
+        </section>
+
+        <!-- Right Column: Information -->
+        <section class="right-content">
+            <!-- Contact Section -->
+            <section class="contact-section">
+                <h2>Contact</h2>
+                <div class="contact-info">
+                    <p>010-0000-0000</p>
+                    <p><a href="mailto:krpark2328@naver.com" style="color: inherit; text-decoration: none;">krpark2328@naver.com</a></p>
+                </div>
+            </section>
+
+            <!-- Work Experience Section -->
+            <section class="experience-section">
+                <h2>Work Experience</h2>
+                <div class="experience-list">
+                    <div class="experience-item">
+                        <span class="exp-date">2025.02.07 ~ 2025.12.10</span>
+                        <span class="exp-desc">튀르키예 교환학생</span>
+                    </div>
+                    <div class="experience-item">
+                        <span class="exp-date">2025.09.19 ~ 2025.09.20</span>
+                        <span class="exp-desc">주한 터키문화원 한복 패션쇼 스태프</span>
+                    </div>
+                    <div class="experience-item">
+                        <span class="exp-date">2025.11.24 ~ 2025.11.25</span>
+                        <span class="exp-desc">이재명 대통령 순방 (그랜드 앙카라 호텔 통역)</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Certifications Section -->
+            <section class="skills-section">
+                <h2>Certifications</h2>
+                <div class="skills-container">
+                    <div class="skill-row">
+                        <span class="skill-name">Turkish C1 Diploma</span>
+                        <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 95%;"></div></div>
+                    </div>
+                    <div class="skill-row">
+                        <span class="skill-name">Wine Sommelier</span>
+                        <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 85%;"></div></div>
+                    </div>
+                    <div class="skill-row">
+                        <span class="skill-name">Master of Bartending</span>
+                        <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 90%;"></div></div>
+                    </div>
+                    <div class="skill-row">
+                        <span class="skill-name">Barista</span>
+                        <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 80%;"></div></div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script>
+        // Trigger skill bar animations on load
+        window.addEventListener('load', () => {
+            const bars = document.querySelectorAll('.skill-bar-fill');
+            bars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>

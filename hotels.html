@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>튀르키예 호텔 투어 | Park Kyung-rim</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .hotels-container {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 40px;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .hotels-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .hotels-header h1 {
+            font-family: 'Nanum Pen Script', cursive;
+            font-size: 5rem;
+            font-weight: normal;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .hotels-header p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* Grid Layout for Hotels */
+        .hotel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 40px;
+        }
+
+        .hotel-card {
+            background-color: #fdfaf6;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hotel-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(178, 58, 31, 0.15);
+        }
+
+        .hotel-img-container {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .hotel-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .hotel-card:hover .hotel-img {
+            transform: scale(1.05);
+        }
+
+        .hotel-info {
+            padding: 25px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hotel-number {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hotel-title {
+            font-size: 1.4rem;
+            color: #333;
+            line-height: 1.4;
+            font-weight: 600;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 40px 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-close {
+            position: fixed;
+            top: 20px; right: 30px;
+            color: white;
+            font-size: 50px;
+            cursor: pointer;
+            z-index: 1001;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--accent-color);
+        }
+
+        .modal-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            align-items: center;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            transition: transform 0.3s;
+        }
+
+        .modal-content img:hover {
+            transform: scale(1.03);
+            z-index: 10;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hotels-container">
+        <a href="index.html" class="back-btn" style="margin-bottom: 40px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            메인 화면으로
+        </a>
+
+        <div class="hotels-header">
+            <h1>튀르키예 호텔 투어</h1>
+        </div>
+
+        <div class="hotel-grid">
+            <!-- Hotel 1 -->
+            <div class="hotel-card" onclick="openModal('modal-hotel-1')" style="cursor: pointer;">
+                <div class="hotel-img-container" style="position: relative;">
+                    <img src="scenic_istanbul.png" alt="DoubleTree by Hilton Istanbul Topkapi" class="hotel-img">
+                </div>
+                <div class="hotel-info">
+                    <div class="hotel-number">01</div>
+                    <h3 class="hotel-title">DoubleTree by Hilton Istanbul Topkapi <br><span style="font-size: 0.9rem; color: #666; font-weight: normal;">(더블트리 바이 힐튼 이스탄불 톱카프)</span></h3>
+                    <p style="color: var(--accent-color); font-size: 0.9rem; margin-top: 8px;">(사진 5장 포함)</p>
+                </div>
+            </div>
+
+            <!-- Hotel 2 -->
+            <div class="hotel-card" onclick="openModal('modal-hotel-2')" style="cursor: pointer;">
+                <div class="hotel-img-container" style="position: relative;">
+                    <img src="scenic_ankara.png" alt="Hilton Garden Inn Ankara Gimat" class="hotel-img">
+                </div>
+                <div class="hotel-info">
+                    <div class="hotel-number">02</div>
+                    <h3 class="hotel-title">Hilton Garden Inn Ankara Gimat <br><span style="font-size: 0.9rem; color: #666; font-weight: normal;">(힐튼 가든 인 앙카라 기마트)</span></h3>
+                    <p style="color: var(--accent-color); font-size: 0.9rem; margin-top: 8px;">(사진 4장 포함)</p>
+                </div>
+            </div>
+
+            <!-- Hotel 3 -->
+            <div class="hotel-card" onclick="openModal('modal-hotel-3')" style="cursor: pointer;">
+                <div class="hotel-img-container" style="position: relative;">
+                    <img src="turkey.png" alt="Signature Garden Avanos Hotel" class="hotel-img">
+                </div>
+                <div class="hotel-info">
+                    <div class="hotel-number">03</div>
+                    <h3 class="hotel-title">Signature Garden Avanos Hotel <br><span style="font-size: 0.9rem; color: #666; font-weight: normal;">(시그니처 가든 아바노스 호텔)</span></h3>
+                    <p style="color: var(--accent-color); font-size: 0.9rem; margin-top: 8px;">(사진 7장 포함)</p>
+                </div>
+            </div>
+
+            <!-- Hotel 4 -->
+            <div class="hotel-card" onclick="openModal('modal-hotel-4')" style="cursor: pointer;">
+                <div class="hotel-img-container" style="position: relative;">
+                    <img src="scenic_antalya.png" alt="B Business Hotel & Spa" class="hotel-img">
+                </div>
+                <div class="hotel-info">
+                    <div class="hotel-number">04</div>
+                    <h3 class="hotel-title">B Business Hotel & Spa <br><span style="font-size: 0.9rem; color: #666; font-weight: normal;">(B 비즈니스 호텔 & 스파)</span></h3>
+                    <p style="color: var(--accent-color); font-size: 0.9rem; margin-top: 8px;">(사진 5장 포함)</p>
+                </div>
+            </div>
+
+            <!-- Hotel 5 -->
+            <div class="hotel-card" onclick="openModal('modal-hotel-5')" style="cursor: pointer;">
+                <div class="hotel-img-container" style="position: relative;">
+                    <img src="scenic_pamukkale.png" alt="Colossae Thermal Hotel" class="hotel-img">
+                </div>
+                <div class="hotel-info">
+                    <div class="hotel-number">05</div>
+                    <h3 class="hotel-title">Colossae Thermal Hotel <br><span style="font-size: 0.9rem; color: #666; font-weight: normal;">(콜로세아 써멀 호텔)</span></h3>
+                    <p style="color: var(--accent-color); font-size: 0.9rem; margin-top: 8px;">(사진 8장 포함)</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal for Hotel 1 -->
+    <div id="modal-hotel-1" class="modal-overlay" onclick="if(event.target === this) closeModal('modal-hotel-1')">
+        <span class="modal-close" onclick="closeModal('modal-hotel-1')">&times;</span>
+        <div class="modal-content">
+            <img src="KakaoTalk_20260416_211351727.jpg" alt="Photo 1">
+            <img src="KakaoTalk_20260416_211351727_01.jpg" alt="Photo 2">
+            <img src="KakaoTalk_20260416_211351727_02.jpg" alt="Photo 3">
+            <img src="KakaoTalk_20260416_211351727_03.jpg" alt="Photo 4">
+            <img src="KakaoTalk_20260416_211351727_04.jpg" alt="Photo 5">
+        </div>
+    </div>
+
+    <!-- Modal for Hotel 2 -->
+    <div id="modal-hotel-2" class="modal-overlay" onclick="if(event.target === this) closeModal('modal-hotel-2')">
+        <span class="modal-close" onclick="closeModal('modal-hotel-2')">&times;</span>
+        <div class="modal-content">
+            <img src="KakaoTalk_20260416_211351727_05.jpg" alt="Hotel 2 Photo 1">
+            <img src="KakaoTalk_20260416_211806669_01.jpg" alt="Hotel 2 Photo 2">
+            <img src="KakaoTalk_20260416_212407918_26.jpg" alt="Hotel 2 Photo 3">
+            <img src="KakaoTalk_20260416_212407918_27.jpg" alt="Hotel 2 Photo 4">
+        </div>
+    </div>
+
+    <!-- Modal for Hotel 3 -->
+    <div id="modal-hotel-3" class="modal-overlay" onclick="if(event.target === this) closeModal('modal-hotel-3')">
+        <span class="modal-close" onclick="closeModal('modal-hotel-3')">&times;</span>
+        <div class="modal-content">
+            <img src="KakaoTalk_20260416_212109607_01.jpg" alt="Hotel 3 Photo 1">
+            <img src="KakaoTalk_20260416_212109607_02.jpg" alt="Hotel 3 Photo 2">
+            <img src="KakaoTalk_20260416_212109607_06.jpg" alt="Hotel 3 Photo 3">
+            <img src="KakaoTalk_20260416_212407918_13.jpg" alt="Hotel 3 Photo 4">
+            <img src="KakaoTalk_20260416_212407918_14.jpg" alt="Hotel 3 Photo 5">
+            <img src="KakaoTalk_20260416_212407918_19.jpg" alt="Hotel 3 Photo 6">
+            <img src="KakaoTalk_20260416_212407918_22.jpg" alt="Hotel 3 Photo 7">
+        </div>
+    </div>
+
+    <!-- Modal for Hotel 4 -->
+    <div id="modal-hotel-4" class="modal-overlay" onclick="if(event.target === this) closeModal('modal-hotel-4')">
+        <span class="modal-close" onclick="closeModal('modal-hotel-4')">&times;</span>
+        <div class="modal-content">
+            <img src="KakaoTalk_20260416_212407918.jpg" alt="Hotel 4 Photo 1">
+            <img src="KakaoTalk_20260416_212407918_06.jpg" alt="Hotel 4 Photo 2">
+            <img src="KakaoTalk_20260416_212407918_11.jpg" alt="Hotel 4 Photo 3">
+            <img src="KakaoTalk_20260416_212407918_18.jpg" alt="Hotel 4 Photo 4">
+            <img src="KakaoTalk_20260416_212407918_20.jpg" alt="Hotel 4 Photo 5">
+        </div>
+    </div>
+
+    <!-- Modal for Hotel 5 -->
+    <div id="modal-hotel-5" class="modal-overlay" onclick="if(event.target === this) closeModal('modal-hotel-5')">
+        <span class="modal-close" onclick="closeModal('modal-hotel-5')">&times;</span>
+        <div class="modal-content">
+            <img src="KakaoTalk_20260416_212407918_01.jpg" alt="Hotel 5 Photo 1">
+            <img src="KakaoTalk_20260416_212407918_02.jpg" alt="Hotel 5 Photo 2">
+            <img src="KakaoTalk_20260416_212407918_03.jpg" alt="Hotel 5 Photo 3">
+            <img src="KakaoTalk_20260416_212407918_08.jpg" alt="Hotel 5 Photo 4">
+            <img src="KakaoTalk_20260416_212407918_09.jpg" alt="Hotel 5 Photo 5">
+            <img src="KakaoTalk_20260416_212407918_10.jpg" alt="Hotel 5 Photo 6">
+            <img src="KakaoTalk_20260416_212407918_16.jpg" alt="Hotel 5 Photo 7">
+            <img src="KakaoTalk_20260416_212407918_17.jpg" alt="Hotel 5 Photo 8">
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) {
+            document.getElementById(id).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close on escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                const modals = document.querySelectorAll('.modal-overlay');
+                modals.forEach(modal => {
+                    if (modal.style.display === 'block') {
+                        modal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+                // Close lightbox if open
+                const lightbox = document.getElementById('image-lightbox');
+                if (lightbox && lightbox.style.display === 'flex') {
+                    lightbox.style.display = 'none';
+                }
+            }
+        });
+
+        // Lightbox logic for hotel images
+        document.addEventListener('DOMContentLoaded', () => {
+            const lightbox = document.getElementById('image-lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            
+            const galleryImages = document.querySelectorAll('.modal-content img');
+            galleryImages.forEach(img => {
+                img.style.cursor = 'zoom-in';
+                img.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    lightboxImg.src = img.src;
+                    lightbox.style.display = 'flex';
+                });
+            });
+        });
+    </script>
+
+    <!-- Fullscreen Image Lightbox -->
+    <div id="image-lightbox" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; cursor: zoom-out;" onclick="this.style.display='none'">
+        <img id="lightbox-img" src="" style="max-width: 95vw; max-height: 95vh; object-fit: contain; border-radius: 5px; box-shadow: 0 5px 25px rgba(0,0,0,0.5);">
+    </div>
+</body>
+</html>
