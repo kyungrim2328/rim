@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guestbook | 박경림</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Supabase SDK 연동 -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body style="overflow: auto; height: auto;">
     <main class="guestbook-container">
@@ -29,45 +31,61 @@
         </section>
 
         <section class="message-list" id="messageList">
-            <!-- Messages will be loaded here -->
+            <div class="empty-message">메시지를 불러오는 중입니다...</div>
         </section>
     </main>
 
     <script>
+        // Supabase 초기화 설정
+        const SUPABASE_URL = 'https://cwycaovstmvbdxnblfgi.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_gdJK0TmU_Q4eHhTQBdWVpA__NIBt-V4';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         const nameInput = document.getElementById('name');
         const messageInput = document.getElementById('message');
         const submitBtn = document.getElementById('submitBtn');
         const messageList = document.getElementById('messageList');
 
-        // Load messages from localStorage
-        function loadMessages() {
-            const messages = JSON.parse(localStorage.getItem('guestbookMessages')) || [];
-            messageList.innerHTML = '';
+        // Supabase에서 메시지 불러오기
+        async function loadMessages() {
+            try {
+                const { data: messages, error } = await supabase
+                    .from('guestbook_messages')
+                    .select('*')
+                    .order('created_at', { ascending: false });
 
-            if (messages.length === 0) {
-                messageList.innerHTML = '<div class="empty-message">아직 남겨진 메시지가 없습니다. 첫 번째 메시지를 남겨보세요!</div>';
-                return;
+                if (error) {
+                    console.error('Error fetching messages:', error);
+                    messageList.innerHTML = '<div class="empty-message">메시지를 불러오는 중 에러가 발생했습니다.</div>';
+                    return;
+                }
+
+                messageList.innerHTML = '';
+
+                if (!messages || messages.length === 0) {
+                    messageList.innerHTML = '<div class="empty-message">아직 남겨진 메시지가 없습니다. 첫 번째 메시지를 남겨보세요!</div>';
+                    return;
+                }
+
+                messages.forEach(msg => {
+                    const card = document.createElement('div');
+                    card.className = 'message-card';
+                    card.innerHTML = `
+                        <div class="message-info">
+                            <span class="message-name">${escapeHTML(msg.name)}</span>
+                            <span class="message-date">${new Date(msg.created_at).toLocaleDateString()}</span>
+                        </div>
+                        <div class="message-content">${escapeHTML(msg.content)}</div>
+                    `;
+                    messageList.appendChild(card);
+                });
+            } catch (err) {
+                console.error(err);
             }
-
-            // Sort by date descending
-            messages.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            messages.forEach(msg => {
-                const card = document.createElement('div');
-                card.className = 'message-card';
-                card.innerHTML = `
-                    <div class="message-info">
-                        <span class="message-name">${msg.name}</span>
-                        <span class="message-date">${new Date(msg.date).toLocaleDateString()}</span>
-                    </div>
-                    <div class="message-content">${msg.content}</div>
-                `;
-                messageList.appendChild(card);
-            });
         }
 
-        // Save message to localStorage
-        submitBtn.addEventListener('click', () => {
+        // Supabase에 메시지 저장하기
+        submitBtn.addEventListener('click', async () => {
             const name = nameInput.value.trim();
             const content = messageInput.value.trim();
 
@@ -76,22 +94,45 @@
                 return;
             }
 
-            const newMessage = {
-                name: name,
-                content: content,
-                date: new Date().toISOString()
-            };
+            // 등록 중 로딩 상태 표시
+            submitBtn.disabled = true;
+            submitBtn.textContent = '등록 중...';
 
-            const messages = JSON.parse(localStorage.getItem('guestbookMessages')) || [];
-            messages.push(newMessage);
-            localStorage.setItem('guestbookMessages', JSON.stringify(messages));
+            try {
+                const { error } = await supabase
+                    .from('guestbook_messages')
+                    .insert([{ name: name, content: content }]);
 
-            nameInput.value = '';
-            messageInput.value = '';
-            loadMessages();
+                if (error) {
+                    console.error('Error inserting message:', error);
+                    alert('메시지 등록에 실패했습니다. 올바른 키나 테이블이 설정되어 있는지 확인하세요.');
+                } else {
+                    nameInput.value = '';
+                    messageInput.value = '';
+                    await loadMessages();
+                }
+            } catch (err) {
+                console.error(err);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '메시지 남기기';
+            }
         });
 
-        // Initial load
+        // XSS 방지를 위한 HTML 이스케이프 함수
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag])
+            );
+        }
+
+        // 초기 로딩
         window.onload = loadMessages;
     </script>
 </body>
